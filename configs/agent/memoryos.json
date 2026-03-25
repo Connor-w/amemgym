@@ -1,7 +1,7 @@
 {
   "assistant_type": "memoryos",
   "llm_config": {
-    "model": "gpt-4o-mini",
+    "model": "gpt-4.1-mini",
     "api_key": "${OPENAI_API_KEY}",
     "base_url": "${OPENAI_BASE_URL}"
   },
@@ -9,7 +9,7 @@
     "user_id": "amemgym_user",
     "assistant_id": "amemgym_assistant",
     "data_storage_path": "./memoryos_data",
-    "llm_model": "gpt-4o-mini",
+    "llm_model": "gpt-4.1-mini",
     "embedding_model_name": "BAAI/bge-m3",
     "short_term_capacity": 7,
     "mid_term_capacity": 2000,
