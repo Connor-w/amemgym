@@ -118,7 +118,7 @@ class MemoryosNew(BaseAgent):
 
         return response_content
 
-class MemoryOSAssistant(BaseAgent):
+class MemoryOSAgent(BaseAgent):
     """
     MemoryOS接入AMemGym的Assistant实现
 
