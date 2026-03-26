@@ -1,20 +1,24 @@
 {
-  "assistant_type": "memoryos",
-  "llm_config": {
-    "model": "gpt-4.1-mini",
-    "api_key": "${OPENAI_API_KEY}",
-    "base_url": "${OPENAI_BASE_URL}"
-  },
-  "memory_config": {
-    "user_id": "amemgym_user",
-    "assistant_id": "amemgym_assistant",
-    "data_storage_path": "./memoryos_data",
-    "llm_model": "gpt-4.1-mini",
-    "embedding_model_name": "BAAI/bge-m3",
-    "short_term_capacity": 7,
-    "mid_term_capacity": 2000,
-    "long_term_knowledge_capacity": 100,
-    "retrieval_queue_capacity": 7,
-    "mid_term_heat_threshold": 5.0
-  }
+    "type": "memoryos",
+    "name": "gpt-4.1-mini-memoryos",
+    "llm_config": {
+        "base_url": null,
+        "api_key": null,
+        "llm_model": "gpt-4.1-mini",
+        "temperature": 0.0,
+        "max_tokens": 8192,
+        "source": "agent:interaction"
+    },
+    "agent_config": {
+        "user_id": "amemgym_user",
+        "assistant_id": "amemgym_assistant",
+        "data_storage_path": "./memoryos_data",
+        "llm_model": "gpt-4.1-mini",
+        "embedding_model_name": "BAAI/bge-m3",
+        "short_term_capacity": 7,
+        "mid_term_capacity": 2000,
+        "long_term_knowledge_capacity": 100,
+        "retrieval_queue_capacity": 7,
+        "mid_term_heat_threshold": 5.0
+    }
 }
