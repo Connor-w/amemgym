@@ -115,8 +115,8 @@ if __name__ == "__main__":
     os.makedirs(output_dir, exist_ok=True)
     shutil.copy(args.agent_config, output_dir)
 
-    # data = load_json(args.env_data)
-    data = create_mock_item()
+    data = load_json(args.env_data)
+    # data = create_mock_item()
     for item in data:
         item_dir = os.path.join(output_dir, item["id"])
         os.makedirs(item_dir, exist_ok=True)
