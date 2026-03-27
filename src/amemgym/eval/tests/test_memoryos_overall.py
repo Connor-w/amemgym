@@ -241,7 +241,7 @@ def test_memoryos_overall():
         os.makedirs(item_dir, exist_ok=True)
         
         # Patch sample_session_given_query to avoid real LLM calls
-        with patch('memoryos_overall.sample_session_given_query', mock_sample_session_given_query):
+        with patch('amemgym.eval.memoryos_overall.sample_session_given_query', mock_sample_session_given_query):
             print("\nRunning evaluate_item...")
             evaluate_item(item, agent, item_dir, env_config, off_policy=False)
         
