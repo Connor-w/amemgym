@@ -224,7 +224,7 @@ def test_memoryos_overall():
     # Create temporary directory
     # 获取当前文件所在目录
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    print(f"Current directory: {CURRENT_DIR}")
+    print(f"Current directory: {current_dir}")
     # 在当前文件目录下创建临时目录
     temp_dir = tempfile.mkdtemp(prefix="memoryos_test_", dir=current_dir)
     print(f"\nTest output directory: {temp_dir}")
