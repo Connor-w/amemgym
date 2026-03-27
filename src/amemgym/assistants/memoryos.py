@@ -15,108 +15,6 @@ except ImportError:
     raise ImportError("MemoryOS未安装，请运行: uv pip install memoryos-pro -i https://pypi.org/simple")
 
 
-class MemoryosNew(BaseAgent):
-    def __init__(self, config: Dict):
-        pass
-
-    def get_response(self, query: str, relationship_with_user="friend", style_hint="",
-                     user_conversation_meta_data: dict = None) -> str:
-        """
-        Generates a response to the user's query, incorporating memory and context.
-        """
-        print(f"Memoryos: Generating response for query: '{query[:50]}...'")
-
-        # 1. Retrieve context
-        retrieval_results = self.retriever.retrieve_context(
-            user_query=query,
-            user_id=self.user_id
-            # Using default thresholds from Retriever class for now
-        )
-        retrieved_pages = retrieval_results["retrieved_pages"]
-        retrieved_user_knowledge = retrieval_results["retrieved_user_knowledge"]
-        retrieved_assistant_knowledge = retrieval_results["retrieved_assistant_knowledge"]
-
-        # 2. Get short-term history
-        short_term_history = self.short_term_memory.get_all()
-        history_text = "\n".join([
-            f"User: {qa.get('user_input', '')}\nAssistant: {qa.get('agent_response', '')} (Time: {qa.get('timestamp', '')})"
-            for qa in short_term_history
-        ])
-
-        # 3. Format retrieved mid-term pages (retrieval_queue equivalent)
-        retrieval_text = "\n".join([
-            f"【Historical Memory】\nUser: {page.get('user_input', '')}\nAssistant: {page.get('agent_response', '')}\nTime: {page.get('timestamp', '')}\nConversation chain overview: {page.get('meta_info', 'N/A')}"
-            for page in retrieved_pages
-        ])
-
-        # 4. Get user profile
-        user_profile_text = self.user_long_term_memory.get_raw_user_profile(self.user_id)
-        if not user_profile_text or user_profile_text.lower() == "none":
-            user_profile_text = "No detailed profile available yet."
-
-        # 5. Format retrieved user knowledge for background
-        user_knowledge_background = ""
-        if retrieved_user_knowledge:
-            user_knowledge_background = "\n【Relevant User Knowledge Entries】\n"
-            for kn_entry in retrieved_user_knowledge:
-                user_knowledge_background += f"- {kn_entry['knowledge']} (Recorded: {kn_entry['timestamp']})\n"
-
-        background_context = f"【User Profile】\n{user_profile_text}\n{user_knowledge_background}"
-
-        # 6. Format retrieved Assistant Knowledge (from assistant's LTM)
-        # Use retrieved assistant knowledge instead of all assistant knowledge
-        assistant_knowledge_text_for_prompt = "【Assistant Knowledge Base】\n"
-        if retrieved_assistant_knowledge:
-            for ak_entry in retrieved_assistant_knowledge:
-                assistant_knowledge_text_for_prompt += f"- {ak_entry['knowledge']} (Recorded: {ak_entry['timestamp']})\n"
-        else:
-            assistant_knowledge_text_for_prompt += "- No relevant assistant knowledge found for this query.\n"
-
-        # 7. Format user_conversation_meta_data (if provided)
-        meta_data_text_for_prompt = "【Current Conversation Metadata】\n"
-        if user_conversation_meta_data:
-            try:
-                meta_data_text_for_prompt += json.dumps(user_conversation_meta_data, ensure_ascii=False, indent=2)
-            except TypeError:
-                meta_data_text_for_prompt += str(user_conversation_meta_data)
-        else:
-            meta_data_text_for_prompt += "None provided for this turn."
-
-        # 8. Construct Prompts
-        system_prompt_text = prompts.GENERATE_SYSTEM_RESPONSE_SYSTEM_PROMPT.format(
-            relationship=relationship_with_user,
-            assistant_knowledge_text=assistant_knowledge_text_for_prompt,
-            meta_data_text=meta_data_text_for_prompt  # Using meta_data_text placeholder for user_conversation_meta_data
-        )
-
-        user_prompt_text = prompts.GENERATE_SYSTEM_RESPONSE_USER_PROMPT.format(
-            history_text=history_text,
-            retrieval_text=retrieval_text,
-            background=background_context,
-            relationship=relationship_with_user,
-            query=query
-        )
-
-        messages = [
-            {"role": "system", "content": system_prompt_text},
-            {"role": "user", "content": user_prompt_text}
-        ]
-
-        # 9. Call LLM for response
-        print("Memoryos: Calling LLM for final response generation...")
-        # print("System Prompt:\n", system_prompt_text)
-        # print("User Prompt:\n", user_prompt_text)
-        response_content = self.client.chat_completion(
-            model=self.llm_model,
-            messages=messages,
-            temperature=0.7,
-            max_tokens=1500  # As in original main
-        )
-
-        # 10. Add this interaction to memory
-        self.add_memory(user_input=query, agent_response=response_content, timestamp=get_timestamp())
-
-        return response_content
 
 class MemoryOSAgent(BaseAgent):
     """
@@ -199,6 +97,7 @@ class MemoryOSAgent(BaseAgent):
         self.data_storage_path = f"./memoryos_data_{self.user_id}"
         self.agent_config["data_storage_path"] = self.data_storage_path
         self.memory = self._create_memory_instance()
+
 
     def act(self, obs: str) -> str:
         """
