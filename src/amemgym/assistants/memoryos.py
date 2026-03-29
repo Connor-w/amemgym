@@ -83,7 +83,8 @@ class MemoryOSAgent(BaseAgent):
             long_term_knowledge_capacity=self.agent_config.get("long_term_knowledge_capacity", 100),
             retrieval_queue_capacity=self.agent_config.get("retrieval_queue_capacity", 7),
             mid_term_heat_threshold=self.agent_config.get("mid_term_heat_threshold", 5.0),
-            embedding_model_name=self.agent_config.get("embedding_model_name", "BAAI/bge-m3")
+            mid_term_similarity_threshold=self.agent_config.get("mid_term_similarity_threshold", 0.6), #新增：中期记忆插入相似度阈值
+            # embedding_model_name=self.agent_config.get("embedding_model_name", "BAAI/bge-m3") # 无该参数
         )
 
     def reset(self):
