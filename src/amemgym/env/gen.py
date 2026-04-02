@@ -294,8 +294,6 @@ def main():
     # set base url and api key from environment variable
     llm_config_high = config["llm_config_high_temp"] | {"base_url": os.getenv("LLM_BASE_URL"), "api_key": os.getenv("LLM_API_KEY")}
     llm_config_low = config["llm_config_low_temp"] | {"base_url": os.getenv("LLM_BASE_URL"), "api_key": os.getenv("LLM_API_KEY")}
-    print(f"llm_config_high: {llm_config_high}")
-    print(f"llm_config_low: {llm_config_low}")
 
     raw_data_dir = os.path.join(args.data_dir, "raw")
     if args.reset and os.path.exists(raw_data_dir):
@@ -312,8 +310,6 @@ def main():
             exclude_ids=config["exclude_ids"],
             random_state=config["seed"]
         )
-        llm_config_low['llm_model'] = 'gpt-4.1-mini'  # todo
-        llm_config_high['llm_model'] = 'gpt-4.1-mini'  # todo
         personas = [
             format_nemotron_persona(persona, llm_config=llm_config_low)
             for persona in tqdm(personas, ncols=100, desc="Formatting user profiles", leave=False)

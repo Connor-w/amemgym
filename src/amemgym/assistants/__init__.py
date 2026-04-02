@@ -1,5 +1,4 @@
 from .awi import InContextMemAgent
-from .memoryos import MemoryOSAgent
 from .native import NaiveAgent
 from .mem0 import Mem0Agent
 from .evolvable import EvolvableInContextAgent, EvolvableMem0Agent
@@ -41,7 +40,5 @@ def create_agent(agent_config, output_dir, item=None):
         # case "nemori":
         #     local_mem_dir = os.path.join(output_dir, "latest_memories")
         #     return NemoriAgent(agent_config | {"local_mem_dir": local_mem_dir})
-        case "memoryos":
-            return MemoryOSAgent(agent_config)
         case _:
             raise ValueError(f"Unknown agent type: {agent_config['type']}")
