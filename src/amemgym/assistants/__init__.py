@@ -1,4 +1,5 @@
 from .awi import InContextMemAgent
+from .memos import MemOSAgent
 from .native import NaiveAgent
 from .mem0 import Mem0Agent
 from .evolvable import EvolvableInContextAgent, EvolvableMem0Agent
@@ -34,6 +35,8 @@ def create_agent(agent_config, output_dir, item=None):
         case "rag-evolve" | "mem0-evolution":
             local_mem_dir = os.path.join(output_dir, "latest_memories")
             return EvolvableMem0Agent(agent_config | {"local_mem_dir": local_mem_dir})
+        case "memos":
+            return MemOSAgent(agent_config)
         # case "a-mem":
         #     local_mem_dir = os.path.join(output_dir, "latest_memories")
         #     return AMemAgent(agent_config | {"local_mem_dir": local_mem_dir})

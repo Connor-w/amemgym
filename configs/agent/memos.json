@@ -1,0 +1,24 @@
+{
+  "type": "memos",
+  "name": "gpt-4.1-mini-memos",
+  "agent_config": {
+    "top_k": 10,
+    "update_bsz": 2,
+    "local_length": 4,
+    "enable_llm_mem_policy": true
+  },
+  "llm_config": {
+    "base_url": null,
+    "api_key": null,
+    "llm_model": "gpt-4.1-mini",
+    "temperature": 0.7,
+    "max_tokens": 1024
+  },
+  "memory_config": {
+    "mode": "self_hosted",
+    "api_base": "http://localhost:8000",
+    "user_id": "amemgym_user",
+    "mem_cube_id": "amemgym_cube",
+    "async_mode": "sync"
+  }
+}
